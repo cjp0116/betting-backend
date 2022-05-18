@@ -21,6 +21,10 @@ const User = db.define('user', {
       isBefore: "01-01-2004"
     }
   },
+  profileImage: {
+    type: Sequelize.STRING,
+    defaultValue: null
+  },
   password: {
     type: Sequelize.STRING,
     validate: { min: 6 },
