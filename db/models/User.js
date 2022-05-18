@@ -8,6 +8,14 @@ const User = db.define('user', {
     unique: true,
     allowNull: false
   },
+  isAdmin: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false,
+    allowNull: false,
+    get() {
+      return () => this.getDataValue('isAdmin')
+    }
+  },
   email: {
     type: Sequelize.STRING,
     unique: true,

@@ -1,4 +1,4 @@
-import ExpressError from "../ExpressError.js";
+import ExpressError from "../utils/ExpressError.js";
 
 const handleValidationErrorDB = err => {
   const errors = Object.values(err).map(el => el.message);

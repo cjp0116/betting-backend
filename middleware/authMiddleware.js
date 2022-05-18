@@ -1,10 +1,13 @@
 import jwt from 'jsonwebtoken';
 import User from '../db/models/User.js';
-import ExpressError from '../ExpressError.js';
+import ExpressError from '../utils/ExpressError.js';
 
 const createToken = (user) => {
   return jwt.sign(
-    { id: user.dataValues.id },
+    {
+      id: user.dataValues.id,
+      isAdmin: user.dataValues.isAdmin
+    },
     process.env.SESSION_SECRET,
     { expiresIn: 86400 }
   )
