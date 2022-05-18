@@ -23,10 +23,6 @@ const validateToken = async (req, res, next) => {
     else if (req.cookies.jwt) {
       token = req.cookies.jwt;
     }
-    else if (req.headers['x-access-token']) {
-      token = req.headers['x-access-token']
-    }
-    if (!token) throw new ExpressError('Unauthorized', 401);
     const decoded = jwt.verify(token, process.env.SESSION_SECRET);
     const currentUser = await User.findOne({
       where: { id: decoded.id }

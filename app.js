@@ -5,6 +5,7 @@ import { dirname, join } from 'path';
 import logger from 'morgan';
 import { validateToken } from './middleware/authMiddleware.js';
 import authRoute from './routes/auth.js';
+import userRoutes from './routes/user.js';
 import { errorHandler } from './controller/errorController.js';
 
 const { json, urlencoded } = express;
@@ -23,9 +24,10 @@ app.get("/", (req, res, next) => {
   next();
 })
 
-app.use("/auth", authRoute);
-
 app.use(validateToken);
+app.use("/auth", authRoute);
+app.use("/user", userRoutes);
+
 app.use((req, res, next) => {
   throw new ExpressError('Not found', 404)
 });

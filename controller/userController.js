@@ -27,8 +27,12 @@ const getAllUsers = async (req, res, next) => {
 
 const getUser = async (req, res, next) => {
   try {
-    
+    const { id } = req.params;
+    const user = await User.findOne({ id });
+    return res.status(200).json({ user })
   } catch (error) {
     return next(error)
   }
 }
+
+export { getAllUsers, getUser };
