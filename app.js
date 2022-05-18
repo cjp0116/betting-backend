@@ -4,7 +4,7 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import logger from 'morgan';
 import { validateToken } from './middleware/authMiddleware.js';
-
+import authRoute from './routes/auth.js';
 // create store for sessions to persist in database
 
 
@@ -19,6 +19,8 @@ app.use(urlencoded({ extended: false }))
 app.use(express.static(join(__dirname, 'public')));
 
 app.get("/", (req, res) => { res.send("hello") })
+
+app.use("/auth", authRoute);
 
 app.use(validateToken);
 app.use((req, res, next) => {
