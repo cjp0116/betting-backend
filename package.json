@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "seed": "node db/seed.js",
     "start": "nodemon server.js"
   },
   "author": "",
