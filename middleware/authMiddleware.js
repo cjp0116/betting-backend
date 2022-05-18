@@ -4,7 +4,7 @@ import ExpressError from '../ExpressError.js';
 
 const createToken = (user) => {
   return jwt.sign(
-    { id: user.id },
+    { id: user.dataValues.id },
     process.env.SESSION_SECRET,
     { expiresIn: 86400 }
   )
@@ -31,7 +31,6 @@ const validateToken = async (req, res, next) => {
     if (currentUser) {
       req.user = currentUser;
       res.locals.user = currentUser;
-      return next();
     }
     return next();
   } catch (error) {

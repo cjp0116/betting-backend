@@ -18,6 +18,8 @@ app.use(json());
 app.use(urlencoded({ extended: false }))
 app.use(express.static(join(__dirname, 'public')));
 
+app.get("/", (req, res) => { res.send("hello") })
+
 app.use(validateToken);
 app.use((req, res, next) => {
   return next(new ExpressError('Not found', 404))
