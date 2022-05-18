@@ -5,12 +5,12 @@ import { dirname, join } from 'path';
 import logger from 'morgan';
 import { validateToken } from './middleware/authMiddleware.js';
 import authRoute from './routes/auth.js';
-// create store for sessions to persist in database
-
+import { errorHandler } from './controller/errorController.js';
 
 const { json, urlencoded } = express;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
 const app = express();
 
 app.use(logger('dev'));
@@ -18,24 +18,17 @@ app.use(json());
 app.use(urlencoded({ extended: false }))
 app.use(express.static(join(__dirname, 'public')));
 
-app.get("/", (req, res) => { res.send("hello") })
+app.get("/", (req, res, next) => {
+  res.sendStatus(200);
+  next();
+})
 
 app.use("/auth", authRoute);
 
 app.use(validateToken);
 app.use((req, res, next) => {
-  return next(new ExpressError('Not found', 404))
+  throw new ExpressError('Not found', 404)
 });
-
-app.use((req, res, next, error) => {
-  console.error(error);
-  const status = error.status || 500;
-  const message = error.message;
-  res.locals.message = message;
-  res.locals.error = req.app.get("env") === 'development' ? error : {};
-  return res.status(status).json({
-    error: { message, status },
-  });
-});
+app.use(errorHandler);
 
 export default app;
