@@ -4,13 +4,13 @@ import redisClient from '../redisClient.js';
 redisClient.connect();
 const DEFAULT_EXPIRATION = 1800;
 
-const getOrSetCache = async (key, cb) => {
+const getOrSetCache = (key, cb) => {
   return new Promise((resolve, reject) => {
     redisClient.get(key, async (err, data) => {
-      if (err) return reject(err);
+      if (err) return reject(new ExpressError(err));
       if (data) return resolve(JSON.parse(data));
       const freshData = await cb();
-      redisClient.set(key, DEFAULT_EXPIRATION, JSON.stringify(freshData));
+      await redisClient.set(key, DEFAULT_EXPIRATION, JSON.stringify(freshData));
       resolve(freshData)
     })
   })
@@ -18,7 +18,12 @@ const getOrSetCache = async (key, cb) => {
 
 const getAllUsers = async (req, res, next) => {
   try {
-    const users = await getOrSetCache('users', User.findAll());
+    const users = await getOrSetCache('users', () =>
+      User.findAll({
+        attributes: {
+          exclude: ["password", "salt"]
+        }
+      }));
     return res.status(200).json({ users })
   } catch (error) {
     return next(error);

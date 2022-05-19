@@ -25,6 +25,7 @@ const validateToken = async (req, res, next) => {
     }
     const decoded = jwt.verify(token, process.env.SESSION_SECRET);
     const currentUser = await User.findOne({
+      attributes: { exclude: ['password', 'salt'] },
       where: { id: decoded.id }
     });
     if (currentUser) {

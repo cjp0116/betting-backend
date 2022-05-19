@@ -1,5 +1,5 @@
-import * as dotenv from 'dotenv';
-dotenv.config();
+// import * as dotenv from 'dotenv';
+// dotenv.config();
 import app from "./app.js";
 
 const normalizePort = val => {
